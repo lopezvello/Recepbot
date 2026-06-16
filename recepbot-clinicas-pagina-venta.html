@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RecepBot Clínicas — Tu recepcionista automático 24/7</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;450;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --tinta:      #0E2235;
+    --tinta-2:    #1C3A57;
+    --menta:      #00BFA0;
+    --menta-osc:  #00A88C;
+    --menta-luz:  #E8FBF6;
+    --crema:      #FBFAF7;
+    --arena:      #F3F1EB;
+    --coral:      #FF6B5B;
+    --gris:       #5B6B78;
+    --gris-cl:    #8A98A3;
+    --linea:      #E9E6DF;
+    --blanco:     #FFFFFF;
+    --texto:      #142433;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--texto);
+    background: var(--crema);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  .eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: .16em;
+    text-transform: uppercase; color: var(--menta-osc); margin-bottom: 14px;
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    background:
+      radial-gradient(120% 120% at 80% -10%, rgba(0,191,160,.16), transparent 55%),
+      linear-gradient(180deg, var(--tinta) 0%, var(--tinta-2) 100%);
+    color: var(--blanco);
+    overflow: hidden;
+  }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+    background-size: 26px 26px; pointer-events: none;
+  }
+  .hero-inner { position: relative; padding: 88px 24px 96px; text-align: center; z-index: 1; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+    backdrop-filter: blur(6px); color: #D9F6F0;
+    font-size: 12.5px; font-weight: 500; letter-spacing: .02em;
+    padding: 8px 16px; border-radius: 100px; margin-bottom: 30px;
+  }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--menta); box-shadow: 0 0 0 4px rgba(0,191,160,.25); }
+  .hero h1 {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: clamp(2.3rem, 5.6vw, 4rem); line-height: 1.08;
+    letter-spacing: -.015em; max-width: 820px; margin: 0 auto 22px;
+  }
+  .hero h1 em { font-style: normal; color: var(--menta); }
+  .hero p.sub {
+    font-size: clamp(1.05rem, 2vw, 1.25rem); color: rgba(255,255,255,.72);
+    max-width: 600px; margin: 0 auto 40px; font-weight: 400;
+  }
+  .cta {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--menta); color: var(--tinta);
+    font-weight: 700; font-size: 1.08rem; padding: 17px 34px;
+    border-radius: 12px; text-decoration: none;
+    box-shadow: 0 10px 30px rgba(0,191,160,.3);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .cta:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,191,160,.42); }
+  .cta svg { width: 18px; height: 18px; transition: transform .18s ease; }
+  .cta:hover svg { transform: translateX(4px); }
+  .hero-meta {
+    margin-top: 22px; font-size: .92rem; color: rgba(255,255,255,.55);
+    display: flex; justify-content: center; gap: 18px; flex-wrap: wrap;
+  }
+  .hero-meta strong { color: #fff; font-weight: 600; }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .hero-wave { position: relative; z-index: 1; line-height: 0; }
+  .hero-wave svg { width: 100%; height: 56px; display: block; }
+
+  /* PROBLEMA */
+  .problema { padding: 84px 0 88px; background: var(--crema); text-align: center; }
+  .problema h2 {
+    font-family: 'Fraunces', serif; font-weight: 600;
+    font-size: clamp(1.7rem, 3.6vw, 2.6rem); line-height: 1.18;
+    letter-spacing: -.01em; max-width: 680px; margin: 0 auto 16px;
+  }
+  .problema > .wrap > p { color: var(--gris); max-width: 580px; margin: 0 auto 52px; font-size: 1.08rem; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+  .stat {
+    background: var(--blanco); border: 1px solid var(--linea); border-radius: 18px;
+    padding: 34px 30px; text-align: left; position: relative; overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .stat:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(14,34,53,.08); }
+  .stat::before { content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background: var(--coral); }
+  .stat .num { font-family: 'Fraunces', serif; font-size: 2.7rem; font-weight: 600; color: var(--coral); line-height: 1; margin-bottom: 12px; letter-spacing: -.02em; }
+  .stat p { font-size: .94rem; color: var(--gris); margin: 0; }
+
+  /* SOLUCIÓN */
+  .solucion { padding: 88px 0; background: var(--arena); }
+  .sol-head { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+  .sol-head h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(1.7rem, 3.6vw, 2.5rem); line-height: 1.18; letter-spacing: -.01em; margin-bottom: 14px; }
+  .sol-head p { color: var(--gris); font-size: 1.05rem; }
+  .autos { display: grid; grid-template-columns: repeat(auto-fit, minmax(248px, 1fr)); gap: 22px; }
+  .auto {
+    background: var(--blanco); border: 1px solid var(--linea); border-radius: 20px;
+    padding: 32px 28px; transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  }
+  .auto:hover { transform: translateY(-5px); box-shadow: 0 22px 50px rgba(14,34,53,.1); border-color: transparent; }
+  .auto .icon { width: 52px; height: 52px; border-radius: 14px; background: var(--menta-luz); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+  .auto .icon svg { width: 26px; height: 26px; stroke: var(--menta-osc); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .auto h3 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.18rem; margin-bottom: 9px; color: var(--tinta); }
+  .auto p { font-size: .92rem; color: var(--gris); line-height: 1.55; }
+  .auto .gain { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--linea); font-size: .82rem; font-weight: 600; color: var(--menta-osc); }
+
+  /* COSTE */
+  .coste { background: radial-gradient(100% 140% at 0% 0%, rgba(0,191,160,.18), transparent 50%), var(--tinta); color: var(--blanco); padding: 70px 0; text-align: center; }
+  .coste h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(1.5rem, 3vw, 2.1rem); margin-bottom: 10px; }
+  .coste p { color: rgba(255,255,255,.68); max-width: 540px; margin: 0 auto; font-size: 1.02rem; }
+  .coste-num { font-family: 'Fraunces', serif; font-size: clamp(3.4rem, 8vw, 5rem); font-weight: 600; color: var(--menta); line-height: 1; margin: 26px 0 6px; letter-spacing: -.02em; }
+  .coste-detalle { font-size: .88rem; color: rgba(255,255,255,.5); }
+
+  /* INCLUYE */
+  .incluye { padding: 88px 0; background: var(--crema); }
+  .incluye .head { text-align: center; max-width: 600px; margin: 0 auto 50px; }
+  .incluye h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.2; margin-bottom: 12px; }
+  .incluye .head p { color: var(--gris); font-size: 1.04rem; }
+  .grid-incluye { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; max-width: 860px; margin: 0 auto; }
+  .item-i {
+    display: flex; gap: 16px; align-items: flex-start;
+    background: var(--blanco); border: 1px solid var(--linea);
+    border-radius: 16px; padding: 22px 24px;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .item-i:hover { transform: translateY(-3px); box-shadow: 0 14px 32px rgba(14,34,53,.07); }
+  .check { width: 28px; height: 28px; border-radius: 9px; background: var(--menta); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+  .check svg { width: 14px; height: 14px; }
+  .item-i h4 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.02rem; margin-bottom: 4px; color: var(--tinta); }
+  .item-i p { font-size: .88rem; color: var(--gris); line-height: 1.5; }
+
+  /* PARA QUIÉN */
+  .paraquien { padding: 84px 0; background: var(--arena); text-align: center; }
+  .paraquien h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(1.6rem, 3.2vw, 2.2rem); margin-bottom: 38px; }
+  .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; max-width: 720px; margin: 0 auto; }
+  .tag { background: var(--blanco); border: 1.5px solid var(--linea); border-radius: 100px; padding: 11px 22px; font-size: .92rem; font-weight: 500; transition: transform .15s ease; }
+  .tag:hover { transform: translateY(-2px); }
+  .tag.si { border-color: var(--menta); color: var(--menta-osc); background: var(--menta-luz); }
+  .tag.no { color: var(--gris-cl); text-decoration: line-through; }
+  .nota-compat { margin: 30px auto 0; color: var(--gris); font-size: .92rem; max-width: 540px; }
+
+  /* PRECIO */
+  .precio { padding: 90px 0; background: var(--crema); }
+  .precio-inner { max-width: 540px; margin: 0 auto; text-align: center; }
+  .precio h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(1.7rem, 3.4vw, 2.3rem); margin-bottom: 10px; }
+  .precio-inner > p.sub { color: var(--gris); margin-bottom: 38px; font-size: 1.02rem; }
+  .precio-box { background: var(--blanco); border: 1px solid var(--linea); border-radius: 24px; padding: 44px 36px; box-shadow: 0 30px 70px rgba(14,34,53,.1); position: relative; overflow: hidden; }
+  .precio-box::before { content:""; position:absolute; top:0; left:0; right:0; height:5px; background: linear-gradient(90deg, var(--menta), var(--menta-osc)); }
+  .tag-once { display: inline-block; background: var(--menta-luz); color: var(--menta-osc); font-size: .76rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 6px 14px; border-radius: 100px; margin-bottom: 20px; }
+  .amount { font-family: 'Fraunces', serif; font-size: 4.2rem; font-weight: 600; color: var(--tinta); line-height: 1; letter-spacing: -.03em; }
+  .amount sup { font-size: 1.6rem; top: -1.4em; margin-right: 2px; }
+  .once { font-size: .92rem; color: var(--gris); margin: 12px 0 30px; }
+  .cta-comprar { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--menta); color: var(--tinta); font-weight: 700; font-size: 1.12rem; padding: 18px 32px; border-radius: 13px; text-decoration: none; box-shadow: 0 10px 28px rgba(0,191,160,.3); transition: transform .18s ease, box-shadow .18s ease; }
+  .cta-comprar:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,191,160,.42); }
+  .cta-comprar svg { width: 18px; height: 18px; transition: transform .18s; }
+  .cta-comprar:hover svg { transform: translateX(4px); }
+  .garantia { font-size: .85rem; color: var(--gris); margin-top: 18px; }
+  .garantia strong { color: var(--texto); }
+
+  /* FAQ */
+  .faq-sec { padding: 84px 0; background: var(--arena); }
+  .faq-inner { max-width: 720px; margin: 0 auto; }
+  .faq-inner h2 { font-family: 'Fraunces', serif; font-weight: 600; font-size: clamp(1.6rem, 3.2vw, 2.1rem); margin-bottom: 36px; text-align: center; }
+  details { background: var(--blanco); border: 1px solid var(--linea); border-radius: 14px; margin-bottom: 12px; padding: 22px 26px; transition: box-shadow .2s ease; }
+  details[open] { box-shadow: 0 14px 34px rgba(14,34,53,.08); }
+  summary { font-weight: 600; font-size: .98rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--tinta); }
+  summary::-webkit-details-marker { display: none; }
+  summary .plus { width: 26px; height: 26px; flex-shrink: 0; border-radius: 8px; background: var(--menta-luz); color: var(--menta-osc); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 400; line-height: 1; transition: transform .2s ease; }
+  details[open] summary .plus { transform: rotate(45deg); }
+  details p { margin-top: 14px; font-size: .92rem; color: var(--gris); line-height: 1.62; }
+
+  /* FOOTER */
+  footer { background: var(--tinta); color: rgba(255,255,255,.6); text-align: center; padding: 48px 24px; font-size: .88rem; }
+  footer strong { color: #fff; }
+  footer a { color: var(--menta); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 560px) { .hero-inner { padding: 70px 22px 80px; } }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-inner">
+    <span class="pill"><span class="dot"></span> Para clínicas dentales, fisioterapia y centros médicos</span>
+    <h1>Cada paciente que no aparece es dinero que <em>no vuelve</em></h1>
+    <p class="sub">RecepBot Clínicas confirma citas, recuerda a tus pacientes, pide reseñas y recupera a quienes hace tiempo que no vienen. Todo solo, sin que tengas que tocar nada.</p>
+    <a href="https://nubia-ai1.lemonsqueezy.com/checkout/buy/4a274479-31fe-411e-863b-6238a4f482b3" class="cta">Quiero RecepBot Clínicas
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <div class="hero-meta">
+      <span>💳 Pago único de <strong>97 €</strong></span>
+      <span>⏱️ Listo en <strong>60 minutos</strong></span>
+      <span>🛠️ <strong>Sin programar</strong></span>
+    </div>
+  </div>
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0 56 L0 28 C 360 56, 1080 0, 1440 28 L1440 56 Z" fill="#FBFAF7"/>
+    </svg>
+  </div>
+</header>
+
+<!-- PROBLEMA -->
+<section class="problema">
+  <div class="wrap reveal">
+    <div class="eyebrow">El problema</div>
+    <h2>Las citas perdidas te cuestan más de lo que crees</h2>
+    <p>Un paciente que falta sin avisar no es solo una hora libre. Es el coste del local, del profesional, y la cita que no pudiste darle a otra persona.</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="num">15–25%</div>
+        <p>de las citas en clínicas se quedan vacías cuando no hay un recordatorio que avise al paciente</p>
+      </div>
+      <div class="stat">
+        <div class="num">5 min</div>
+        <p>se van cada vez que confirmas una cita a mano, llamando uno por uno por teléfono</p>
+      </div>
+      <div class="stat">
+        <div class="num">60 días</div>
+        <p>es lo que tarda de media un paciente en olvidarse de ti e irse a otra clínica</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUCIÓN -->
+<section class="solucion">
+  <div class="wrap">
+    <div class="sol-head reveal">
+      <div class="eyebrow">La solución</div>
+      <h2>Cuatro tareas que se hacen solas mientras tú atiendes</h2>
+      <p>Una vez instalado, RecepBot trabaja en segundo plano. Tu única tarea: apuntar la cita en Google Calendar con el correo del paciente.</p>
+    </div>
+    <div class="autos">
+      <div class="auto reveal">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></div>
+        <h3>Confirma al instante</h3>
+        <p>En cuanto apuntas la cita, el paciente recibe un correo de confirmación con todos sus datos.</p>
+        <div class="gain">↗ Te ahorra 5 minutos por cita</div>
+      </div>
+      <div class="auto reveal">
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div>
+        <h3>Recuerda 24 h antes</h3>
+        <p>El día anterior, el paciente recibe un aviso automático. Las ausencias se desploman.</p>
+        <div class="gain">↗ Hasta 1.500 €/mes recuperados</div>
+      </div>
+      <div class="auto reveal">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8L3.5 9.3l5.9-.9z"/></svg></div>
+        <h3>Pide reseñas en Google</h3>
+        <p>Tras la visita, pide opinión en el momento de mayor satisfacción del paciente.</p>
+        <div class="gain">↗ Más visibilidad y pacientes nuevos</div>
+      </div>
+      <div class="auto reveal">
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9"/><path d="M3 4v5h5"/><path d="M12 8v4l3 2"/></svg></div>
+        <h3>Recupera a los que faltan</h3>
+        <p>Cada semana detecta quién no viene desde hace 60 días y le manda una oferta personalizada con IA.</p>
+        <div class="gain">↗ Pacientes que ya dabas por perdidos</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COSTE -->
+<section class="coste">
+  <div class="wrap reveal">
+    <h2>¿Cuánto cuesta tenerlo funcionando?</h2>
+    <p>Las herramientas que usa RecepBot tienen plan gratuito. La mayoría de clínicas no pagan nada el primer año.</p>
+    <div class="coste-num">0–12 €</div>
+    <div class="coste-detalle">al mes · Make.com gratis + tu Gmail · IA opcional (~2 €/mes)</div>
+  </div>
+</section>
+
+<!-- INCLUYE -->
+<section class="incluye">
+  <div class="wrap">
+    <div class="head reveal">
+      <div class="eyebrow">Qué recibes</div>
+      <h2>Todo listo para instalarlo hoy mismo</h2>
+      <p>Sin saber programar. Si sabes usar el correo y hacer clic con el ratón, puedes instalarlo tú.</p>
+    </div>
+    <div class="grid-incluye">
+      <div class="item-i reveal">
+        <div class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5L11 1" stroke="#0E2235" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h4>4 automatizaciones listas para importar</h4>
+          <p>Ya montadas. Conectas tu cuenta de Google con 2 clics y funcionan. No programas nada.</p>
+        </div>
+      </div>
+      <div class="item-i reveal">
+        <div class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5L11 1" stroke="#0E2235" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h4>Guía paso a paso de 18 páginas</h4>
+          <p>Cada clic explicado con detalle. Instalación completa en 45–60 minutos con un café al lado.</p>
+        </div>
+      </div>
+      <div class="item-i reveal">
+        <div class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5L11 1" stroke="#0E2235" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h4>Plantilla de fichero de pacientes</h4>
+          <p>Una hoja de Google lista para usar. Pacientes y registro de cada acción, organizados desde el día uno.</p>
+        </div>
+      </div>
+      <div class="item-i reveal">
+        <div class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5L11 1" stroke="#0E2235" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h4>Mensajes redactados para clínicas</h4>
+          <p>Tono formal para dental, tono cercano para fisio. Copia, pega y personaliza si quieres.</p>
+        </div>
+      </div>
+      <div class="item-i reveal">
+        <div class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5L11 1" stroke="#0E2235" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h4>Guía de RGPD sencilla</h4>
+          <p>Las reglas claras que necesitas para enviar correos a tus pacientes cumpliendo la ley.</p>
+        </div>
+      </div>
+      <div class="item-i reveal">
+        <div class="check"><svg viewBox="0 0 12 10" fill="none"><path d="M1 5l3.5 3.5L11 1" stroke="#0E2235" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h4>Soporte por correo si te atascas</h4>
+          <p>Si en algún paso no avanzas, escríbenos. Respondemos en menos de 24 horas.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUIÉN -->
+<section class="paraquien">
+  <div class="wrap reveal">
+    <h2>¿Encaja con tu clínica?</h2>
+    <div class="tags">
+      <span class="tag si">Clínica dental</span>
+      <span class="tag si">Fisioterapia</span>
+      <span class="tag si">Estética médica</span>
+      <span class="tag si">Podología</span>
+      <span class="tag si">Psicología y terapia</span>
+      <span class="tag si">Osteopatía</span>
+      <span class="tag no">Sin cita previa</span>
+      <span class="tag no">Sin Google Calendar</span>
+    </div>
+    <p class="nota-compat">Funciona con cualquier programa de citas que se sincronice con Google Calendar: Calendly, Setmore, Acuity y la mayoría.</p>
+  </div>
+</section>
+
+<!-- PRECIO -->
+<section class="precio" id="comprar">
+  <div class="precio-inner reveal">
+    <div class="eyebrow">Precio</div>
+    <h2>Pago único. Tuyo para siempre.</h2>
+    <p class="sub">Sin suscripciones ni cuotas mensuales a nosotros. Pagas una vez y RecepBot trabaja para ti el resto del año.</p>
+    <div class="precio-box">
+      <span class="tag-once">Pago único</span>
+      <div class="amount"><sup>€</sup>97</div>
+      <div class="once">acceso inmediato · descarga al instante</div>
+      <a href="https://nubia-ai1.lemonsqueezy.com/checkout/buy/4a274479-31fe-411e-863b-6238a4f482b3" class="cta-comprar">Instalar RecepBot Clínicas
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <div class="garantia">🔒 Pago seguro · <strong>Garantía de 30 días</strong>. Si no funciona en tu clínica, te devolvemos el dinero.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-sec">
+  <div class="faq-inner reveal">
+    <h2>Preguntas frecuentes</h2>
+
+    <details>
+      <summary>¿Necesito saber programar? <span class="plus">+</span></summary>
+      <p>No. Todo es visual. Las automatizaciones ya vienen montadas: solo conectas tu cuenta de Google con 2 clics y pones el nombre de tu clínica. La guía lo explica con capturas en cada paso.</p>
+    </details>
+
+    <details>
+      <summary>¿Funciona con mi programa de citas actual? <span class="plus">+</span></summary>
+      <p>Si tu programa se sincroniza con Google Calendar, sí. Calendly, Setmore, Acuity y la mayoría lo permiten desde sus ajustes. Si llevas la agenda en papel o en Excel, solo tendrás que pasar las citas a Google Calendar.</p>
+    </details>
+
+    <details>
+      <summary>¿Cuánto se tarda en instalarlo? <span class="plus">+</span></summary>
+      <p>Entre 45 y 60 minutos siguiendo la guía. La mayoría de clínicas lo dejan funcionando en una sola tarde.</p>
+    </details>
+
+    <details>
+      <summary>¿Tengo que pagar algo más aparte de los 97 €? <span class="plus">+</span></summary>
+      <p>Las herramientas que usa (Make.com, Gmail, Google Sheets) tienen plan gratuito que cubre a la mayoría de clínicas. Si activas los mensajes con IA, OpenAI cuesta entre 1 y 3 € al mes. No hay ningún coste fijo obligatorio.</p>
+    </details>
+
+    <details>
+      <summary>¿Es legal mandar correos automáticos a mis pacientes? <span class="plus">+</span></summary>
+      <p>Sí. Los recordatorios y confirmaciones de cita son comunicaciones de servicio, no publicidad. La guía incluye un apartado de RGPD con las reglas claras que necesitas seguir.</p>
+    </details>
+
+    <details>
+      <summary>¿Y si me atasco durante la instalación? <span class="plus">+</span></summary>
+      <p>Escríbenos por correo y te respondemos en menos de 24 horas. Y si tras intentarlo no consigues que funcione, tienes 30 días para pedir la devolución completa.</p>
+    </details>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>RecepBot Clínicas · desarrollado por <strong>Nubia IA</strong> · automatización para PYMEs</p>
+  <p style="margin-top:8px;">¿Dudas antes de comprar? <a href="mailto:pruebamasterebis@gmail.com">pruebamasterebis@gmail.com</a></p>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.transitionDelay = (Math.min(i, 4) * 60) + 'ms';
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
+</body>
+</html>
