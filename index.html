@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RecepBot Clínicas — Tu recepcionista automático 24/7 | Nubia IA</title>
+<style>
+  :root {
+    --dark: #0d1b2a;
+    --dark2: #132336;
+    --teal: #00c9a7;
+    --teal-dim: #00a98a;
+    --white: #f0f4f8;
+    --muted: #8fa8c0;
+    --warn: #f4a261;
+    --border: rgba(0,201,167,0.18);
+    --font-head: 'Georgia', 'Times New Roman', serif;
+    --font-body: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--dark);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── LAYOUT ── */
+  .container { max-width: 760px; margin: 0 auto; padding: 0 24px; }
+  .wide      { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+
+  section { padding: 72px 0; }
+  section + section { border-top: 1px solid var(--border); }
+
+  h1 { font-family: var(--font-head); font-size: clamp(2.4rem, 6vw, 3.6rem); line-height: 1.15; font-weight: 700; }
+  h2 { font-family: var(--font-head); font-size: clamp(1.7rem, 4vw, 2.3rem); line-height: 1.2; font-weight: 700; margin-bottom: 20px; }
+  h3 { font-size: 1.1rem; font-weight: 700; letter-spacing: .02em; margin-bottom: 8px; color: var(--white); }
+  p  { margin-bottom: 16px; color: #c8daea; }
+  strong { color: var(--white); }
+
+  /* ── EYEBROW ── */
+  .eyebrow {
+    display: inline-block;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    border-radius: 999px;
+    padding: 4px 14px;
+    margin-bottom: 24px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 96px 0 80px;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, #0e3248 0%, var(--dark) 70%);
+    border-bottom: 1px solid var(--border);
+  }
+  .hero .eyebrow { margin-bottom: 28px; }
+  .hero h1 { margin-bottom: 20px; }
+  .hero h1 em { color: var(--teal); font-style: normal; }
+  .hero .subhead {
+    font-size: 1.2rem;
+    color: #a8c4d8;
+    max-width: 560px;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+  .hero-price {
+    font-size: .9rem;
+    color: var(--muted);
+    margin-top: 12px;
+  }
+  .hero-price strong { color: var(--white); font-size: 1.5rem; }
+
+  /* ── CTA BUTTON ── */
+  .btn {
+    display: inline-block;
+    background: var(--teal);
+    color: var(--dark);
+    font-weight: 800;
+    font-size: 1.05rem;
+    padding: 16px 36px;
+    border-radius: 6px;
+    text-decoration: none;
+    letter-spacing: .01em;
+    transition: background .18s, transform .12s;
+  }
+  .btn:hover { background: var(--teal-dim); transform: translateY(-2px); }
+  .btn-ghost {
+    display: inline-block;
+    border: 2px solid var(--teal);
+    color: var(--teal);
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 14px 34px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background .18s, color .18s;
+  }
+  .btn-ghost:hover { background: var(--teal); color: var(--dark); }
+
+  /* ── PROBLEM ── */
+  .problem-list { list-style: none; margin: 28px 0; }
+  .problem-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    color: #c8daea;
+  }
+  .problem-list li:last-child { border-bottom: none; }
+  .problem-list .icon {
+    flex-shrink: 0;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(244,162,97,.12);
+    color: var(--warn);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-top: 2px;
+  }
+
+  /* ── PRODUCT INTRO ── */
+  .intro-box {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 36px 40px;
+    margin-top: 32px;
+  }
+
+  /* ── FEATURES ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  @media (max-width: 600px) { .features-grid { grid-template-columns: 1fr; } }
+
+  .feature-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 28px;
+  }
+  .feature-num {
+    font-size: .75rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    color: var(--teal);
+    margin-bottom: 10px;
+    display: block;
+  }
+  .feature-card p { margin-bottom: 0; font-size: .95rem; }
+
+  /* ── FOR WHO ── */
+  .for-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 32px;
+  }
+  @media (max-width: 600px) { .for-grid { grid-template-columns: 1fr; } }
+
+  .for-yes, .for-no {
+    border-radius: 10px;
+    padding: 28px;
+  }
+  .for-yes { background: rgba(0,201,167,.07); border: 1px solid rgba(0,201,167,.25); }
+  .for-no  { background: rgba(244,162,97,.06); border: 1px solid rgba(244,162,97,.2); }
+  .for-label {
+    font-size: .75rem; font-weight: 800; letter-spacing: .1em;
+    text-transform: uppercase; margin-bottom: 16px; display: block;
+  }
+  .for-yes .for-label { color: var(--teal); }
+  .for-no  .for-label { color: var(--warn); }
+  .check-list { list-style: none; }
+  .check-list li { padding: 6px 0; font-size: .95rem; color: #c8daea; display: flex; gap: 10px; }
+  .check-list .tick { flex-shrink: 0; margin-top: 3px; }
+
+  /* ── WHAT YOU GET ── */
+  .includes-list { list-style: none; margin-top: 28px; }
+  .includes-list li {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.05);
+    font-size: .97rem; color: #c8daea;
+  }
+  .includes-list li:last-child { border-bottom: none; }
+  .includes-list .tick { color: var(--teal); font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+
+  /* ── PRICE BOX ── */
+  .price-box {
+    background: var(--dark2);
+    border: 2px solid var(--teal);
+    border-radius: 12px;
+    padding: 48px 40px;
+    text-align: center;
+    margin-top: 32px;
+  }
+  .price-box .price-label { font-size: .9rem; color: var(--muted); margin-bottom: 8px; }
+  .price-box .price-main { font-size: 4rem; font-weight: 900; font-family: var(--font-head); color: var(--white); line-height: 1; }
+  .price-box .price-sub  { font-size: .9rem; color: var(--muted); margin-bottom: 32px; }
+  .price-box .compare    { font-size: .88rem; color: var(--muted); margin-top: 20px; }
+  .price-box .compare strong { color: var(--warn); }
+
+  /* ── GUARANTEE ── */
+  .guarantee-box {
+    display: flex; gap: 28px; align-items: flex-start;
+    background: rgba(0,201,167,.06);
+    border: 1px solid rgba(0,201,167,.2);
+    border-radius: 10px;
+    padding: 32px 36px;
+    margin-top: 32px;
+  }
+  .guarantee-icon { font-size: 2.8rem; flex-shrink: 0; line-height: 1; }
+  .guarantee-box p { margin-bottom: 0; }
+  @media (max-width: 520px) { .guarantee-box { flex-direction: column; } }
+
+  /* ── FAQ ── */
+  .faq-list { margin-top: 32px; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 0;
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q { font-weight: 700; color: var(--white); margin-bottom: 10px; font-size: 1rem; }
+  .faq-a { color: #a8c4d8; font-size: .96rem; margin-bottom: 0; }
+
+  /* ── FINAL CTA ── */
+  .final-cta {
+    text-align: center;
+    background: radial-gradient(ellipse 70% 80% at 50% 50%, #0e3248 0%, var(--dark) 80%);
+    padding: 96px 0;
+  }
+  .final-cta h2 { margin-bottom: 16px; }
+  .final-cta p  { max-width: 500px; margin: 0 auto 36px; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 32px 0;
+    font-size: .82rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--teal); }
+
+  /* ── MISC ── */
+  .teal  { color: var(--teal); }
+  .warn  { color: var(--warn); }
+  .muted { color: var(--muted); }
+  .center { text-align: center; }
+  .mt8  { margin-top: 8px; }
+  .mt16 { margin-top: 16px; }
+  .mt24 { margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="container">
+    <span class="eyebrow">Automatización IA · Clínicas</span>
+    <h1>Deja de perder citas por<br><em>no-shows y descuidos</em></h1>
+    <p class="subhead">
+      RecepBot es el sistema que confirma, recuerda y recupera tus citas de forma automática.
+      Sin contratar a nadie. Sin cambiar tu agenda.
+    </p>
+    <a href="https://nubia-ai1.lemonsqueezy.com/checkout/buy/4a274479-31fe-411e-863b-6238a4f482b3" class="btn">Quiero RecepBot — 97 €</a>
+    <p class="hero-price">Pago único · Sin cuotas · Tuyo para siempre</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     EL PROBLEMA
+════════════════════════════════════════════════ -->
+<section id="problema">
+  <div class="container">
+    <span class="eyebrow">El problema</span>
+    <h2>¿Te suena algo de esto?</h2>
+    <p>Un negocio con agenda llena no significa un negocio rentable. Las citas se pierden de formas muy predecibles, y todas tienen solución.</p>
+
+    <ul class="problem-list">
+      <li>
+        <span class="icon">⚠</span>
+        <span><strong>El paciente no apareció.</strong> No es la primera vez. Le habías reservado 45 minutos y ese hueco ya no lo recuperas. Si te pasa 3 veces a la semana, estás regalando cientos de euros cada mes.</span>
+      </li>
+      <li>
+        <span class="icon">⚠</span>
+        <span><strong>Estás respondiendo WhatsApps a las 10 de la noche.</strong> "¿Tengo cita mañana?" — una pregunta que tu agenda ya sabe responder, pero tú tienes que contestar a mano.</span>
+      </li>
+      <li>
+        <span class="icon">⚠</span>
+        <span><strong>Los pacientes no vuelven y no sabes por qué.</strong> Alguien que vino hace 3 meses y no ha pedido cita desde entonces. Nadie le ha mandado nada.</span>
+      </li>
+      <li>
+        <span class="icon">⚠</span>
+        <span><strong>Tienes pocas reseñas en Google</strong> aunque tus pacientes están contentos. Simplemente nadie se acuerda de dejarla si no se lo pides en el momento justo.</span>
+      </li>
+    </ul>
+
+    <p class="mt24">Todo esto no es mala suerte. Es un problema de proceso, y tiene solución.</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     QUÉ ES RECEPBOT
+════════════════════════════════════════════════ -->
+<section id="que-es">
+  <div class="container">
+    <span class="eyebrow">La solución</span>
+    <h2>Conoce RecepBot</h2>
+    <p>
+      RecepBot es un pack de <strong>4 automatizaciones listas para conectar a tu agenda</strong>. 
+      Funcionan con Make.com (no necesitas saber programar) y trabajan en segundo plano 
+      mientras tú atiendes a tus pacientes.
+    </p>
+    <p>
+      No es un software nuevo que tienes que aprender. 
+      No hay cuota mensual. Es un sistema que instalas una vez y funciona solo.
+    </p>
+
+    <div class="intro-box">
+      <p style="margin-bottom:0; color: var(--white);">
+        "Una recepcionista de carne y hueso cobra entre 1.200 y 1.500 € al mes y no trabaja
+        por la noche ni los fines de semana. RecepBot hace la parte repetitiva por 97 €, una sola vez."
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     LAS 4 AUTOMATIZACIONES
+════════════════════════════════════════════════ -->
+<section id="automatizaciones">
+  <div class="container">
+    <span class="eyebrow">Lo que hace RecepBot</span>
+    <h2>4 automatizaciones, 4 problemas resueltos</h2>
+    <p>Cada pieza ataca un punto de fuga de ingresos distinto. Juntas forman un sistema completo.</p>
+
+    <div class="features-grid">
+
+      <div class="feature-card">
+        <span class="feature-num">Automatización 01</span>
+        <h3>Confirmación instantánea de cita</h3>
+        <p>
+          En cuanto alguien apunta una cita en tu agenda, el paciente recibe un email de confirmación automático.
+          Sabe el día, la hora, la dirección y lo que tiene que traer. <strong>Cero llamadas de "¿tengo cita el martes?"</strong>
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-num">Automatización 02</span>
+        <h3>Recordatorio 24 horas antes</h3>
+        <p>
+          El día antes de su cita, el paciente recibe un recordatorio con toda la información.
+          Muchos no-shows no son mala fe: son olvidos. <strong>Este recordatorio los elimina casi por completo.</strong>
+          Clínicas que lo usan reportan reducciones de hasta el 80% en ausencias.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-num">Automatización 03</span>
+        <h3>Solicitud automática de reseña en Google</h3>
+        <p>
+          Unas horas después de la cita, el paciente recibe un mensaje corto pidiéndole que valore su experiencia.
+          <strong>El momento justo, cuando todavía lo tiene fresco.</strong> Más reseñas = más visibilidad = más pacientes nuevos sin pagar por publicidad.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-num">Automatización 04</span>
+        <h3>Recuperación de pacientes perdidos</h3>
+        <p>
+          Si alguien no ha vuelto en 60 días, el sistema le manda un mensaje automático con una oferta o recordatorio personalizado.
+          <strong>Pacientes que creías que se habían ido vuelven a pedir cita</strong> sin que tú hagas nada.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     PARA QUIÉN ES
+════════════════════════════════════════════════ -->
+<section id="para-quien">
+  <div class="container">
+    <span class="eyebrow">Claridad antes de comprar</span>
+    <h2>¿Es para ti?</h2>
+    <p>Sé honesto contigo mismo antes de comprar. RecepBot funciona muy bien en algunos negocios y no tiene sentido en otros.</p>
+
+    <div class="for-grid">
+      <div class="for-yes">
+        <span class="for-label">✓ Sí es para ti si…</span>
+        <ul class="check-list">
+          <li><span class="tick teal">✓</span>Tienes una clínica dental, de fisioterapia, podología, psicología u otra especialidad con citas</li>
+          <li><span class="tick teal">✓</span>Usas Google Calendar, Calendly u otra herramienta de agenda digital</li>
+          <li><span class="tick teal">✓</span>Te duelen los no-shows o el tiempo que pierdes con avisos manuales</li>
+          <li><span class="tick teal">✓</span>Quieres más reseñas en Google pero no sabes cómo conseguirlas</li>
+          <li><span class="tick teal">✓</span>No necesitas (ni quieres) aprender a programar — solo que funcione</li>
+        </ul>
+      </div>
+      <div class="for-no">
+        <span class="for-label">✗ No es para ti si…</span>
+        <ul class="check-list">
+          <li><span class="tick warn">✗</span>Tu negocio no trabaja por citas (tienda física sin reservas, e-commerce…)</li>
+          <li><span class="tick warn">✗</span>Llevas tu agenda en papel y no tienes intención de cambiar</li>
+          <li><span class="tick warn">✗</span>Buscas un software todo-en-uno con app propia y soporte 24/7 incluido</li>
+          <li><span class="tick warn">✗</span>No tienes cuenta de correo profesional para enviar los emails automáticos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     LO QUE OBTIENES
+════════════════════════════════════════════════ -->
+<section id="contenido">
+  <div class="container">
+    <span class="eyebrow">El pack completo</span>
+    <h2>Qué recibes exactamente</h2>
+    <p>No es solo un archivo. Es todo lo que necesitas para tenerlo funcionando en un día.</p>
+
+    <ul class="includes-list">
+      <li>
+        <span class="tick">✦</span>
+        <span><strong>Los 4 blueprints de Make.com</strong> — listos para importar. Sin código, sin configuraciones complicadas. Un clic y los tienes en tu cuenta.</span>
+      </li>
+      <li>
+        <span class="tick">✦</span>
+        <span><strong>Guía de instalación paso a paso</strong> — en PDF con capturas de pantalla reales. Si sabes usar Google Calendar y el correo, puedes instalarlo tú solo.</span>
+      </li>
+      <li>
+        <span class="tick">✦</span>
+        <span><strong>Plantillas de email editables</strong> — los textos de confirmación, recordatorio, solicitud de reseña y recuperación, escritos para clínicas. Solo tienes que poner tu logo y tu nombre.</span>
+      </li>
+      <li>
+        <span class="tick">✦</span>
+        <span><strong>Plantilla CRM básica en Google Sheets</strong> — para que sepas en todo momento cuántos pacientes tienes activos, cuántos llevan más de 60 días sin venir y cuántas reseñas has conseguido.</span>
+      </li>
+      <li>
+        <span class="tick">✦</span>
+        <span><strong>Soporte por email durante 30 días</strong> — si te atascas en la instalación, me escribes y te respondo. No te dejo tirado con un archivo y buena suerte.</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     PRECIO
+════════════════════════════════════════════════ -->
+<section id="precio">
+  <div class="container">
+    <span class="eyebrow">Inversión</span>
+    <h2>Precio y valor</h2>
+    <p>
+      Un no-show en una clínica de fisioterapia vale entre 40 y 80 €. Si RecepBot evita solo
+      <strong>2 ausencias al mes</strong>, se paga solo el primer mes. El resto del tiempo trabaja gratis para ti.
+    </p>
+
+    <div class="price-box">
+      <p class="price-label">Pago único, sin suscripción</p>
+      <p class="price-main">97 €</p>
+      <p class="price-sub">IVA incluido</p>
+      <a href="https://nubia-ai1.lemonsqueezy.com/checkout/buy/4a274479-31fe-411e-863b-6238a4f482b3" class="btn" style="min-width: 260px;">Comprar ahora por 97 €</a>
+      <p class="compare">
+        <strong>Alternativa:</strong> contratar un servicio de recordatorios SaaS = 
+        <strong>49–99 €/mes</strong> para siempre.<br>
+        RecepBot: <strong>97 € una sola vez.</strong>
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     GARANTÍA
+════════════════════════════════════════════════ -->
+<section id="garantia">
+  <div class="container">
+    <span class="eyebrow">Sin riesgo</span>
+    <h2>Garantía de 30 días</h2>
+
+    <div class="guarantee-box">
+      <span class="guarantee-icon">🛡️</span>
+      <div>
+        <p>
+          Si en los primeros 30 días después de la compra sigues teniendo dudas sobre la instalación,
+          no ves el resultado que esperabas o simplemente decides que no es lo que necesitabas,
+          <strong>te devuelvo el dinero sin preguntas</strong>.
+        </p>
+        <p>
+          Solo tienes que mandarme un email. No hace falta justificación ni formularios.
+          El riesgo es cero y está de tu lado.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     FAQ
+════════════════════════════════════════════════ -->
+<section id="faq">
+  <div class="container">
+    <span class="eyebrow">Preguntas frecuentes</span>
+    <h2>Lo que me suelen preguntar antes de comprar</h2>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <p class="faq-q">¿Necesito saber de informática para instalarlo?</p>
+        <p class="faq-a">
+          No. Si sabes moverte por Google Calendar y tienes una cuenta de correo, puedes instalarlo.
+          La guía incluida está escrita para alguien que nunca ha oído hablar de Make.com.
+          Tiene capturas de pantalla de cada paso. El proceso completo lleva menos de 2 horas.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <p class="faq-q">¿Qué agenda de citas tiene que usar mi clínica?</p>
+        <p class="faq-a">
+          RecepBot funciona con Google Calendar, Calendly y cualquier agenda que permita
+          exportar eventos. La guía cubre la integración con Google Calendar, que es la más
+          común. Si usas otro sistema, escríbeme antes de comprar y te digo si es compatible.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <p class="faq-q">¿Hay algún coste adicional aparte de los 97 €?</p>
+        <p class="faq-a">
+          Necesitas una cuenta de Make.com. El plan gratuito cubre hasta 1.000 operaciones
+          al mes, que para la mayoría de clínicas pequeñas es suficiente. Si tu volumen de
+          citas es alto, el plan de pago de Make cuesta unos 9 €/mes. Eso es todo.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <p class="faq-q">Los emails automáticos, ¿llegan a spam?</p>
+        <p class="faq-a">
+          No si sigues la configuración que indica la guía. Los emails se envían desde tu
+          propia cuenta de correo (Gmail o cualquier otro), no desde una dirección genérica.
+          El paciente ve tu nombre y tu dirección, igual que si lo enviaras tú a mano.
+        </p>
+      </div>
+
+      <div class="faq-item">
+        <p class="faq-q">¿Puedo adaptar los textos de los emails a mi clínica?</p>
+        <p class="faq-a">
+          Sí, completamente. Las plantillas incluidas son el punto de partida, no una
+          camisa de fuerza. Puedes cambiar el tono, el logo, el nombre de la clínica,
+          los colores y cualquier detalle del mensaje. Son tuyas.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     CTA FINAL
+════════════════════════════════════════════════ -->
+<section class="final-cta">
+  <div class="container center">
+    <span class="eyebrow">Última llamada</span>
+    <h2>Tu agenda no debería depender<br>de que te acuerdes de mandar un mensaje</h2>
+    <p>
+      Cada semana que pasa sin un sistema de recordatorios son no-shows que podrías haber evitado
+      y reseñas que podrías haber conseguido. RecepBot lo resuelve hoy, por 97 €, de una sola vez.
+    </p>
+    <a href="https://nubia-ai1.lemonsqueezy.com/checkout/buy/4a274479-31fe-411e-863b-6238a4f482b3" class="btn">Empezar ahora — 97 €</a>
+    <p class="muted mt16" style="font-size: .88rem;">Acceso inmediato · Garantía 30 días · Soporte incluido</p>
+  </div>
+</section>
+
+
+<!-- ═══════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+<footer>
+  <div class="container">
+    <p>Desarrollado por <strong>Nubia IA</strong> · Automatización para negocios reales</p>
+    <p class="mt8"><a href="#">Política de privacidad</a> · <a href="#">Condiciones de compra</a> · <a href="#">Contacto</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
